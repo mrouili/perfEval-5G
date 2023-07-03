@@ -1,28 +1,42 @@
 <!-- vscode-markdown-toc -->
-* 1. [2.1 OAI CN5G pre-requisites](#OAICN5Gpre-requisites)
-* 2. [2.2  SIM Card](#SIMCard)
-* 3. [3.1 OAI gNB pre-requisites](#OAIgNBpre-requisites)
-	* 3.1. [Build UHD from source](#BuildUHDfromsource)
-* 4. [3.2 Build OAI gNB](#BuildOAIgNB)
-* 5. [4.1 Run OAI CN5G](#RunOAICN5G)
-* 6. [4.2 Run OAI gNB](#RunOAIgNB)
-	* 6.1. [USRP B210](#USRPX310)
-    
-* 7. [5.1 Testing with Quectel RM500Q](#TestingwithQuectelRM500Q)
-	* 7.1. [5.1.1 Setup Quectel](#SetupQuectel)
-	* 7.2. [5.1.2 Ping test](#Pingtest)
-	* 7.3. [5.1.3 Downlink iPerf test](#DownlinkiPerftest)
-* 8. [6.1 USRP N300 and X300 Ethernet Tuning](#USRPN300andX300EthernetTuning)
-* 9. [6.2 Real-time performance workarounds](#Real-timeperformanceworkarounds)
-* 10. [6.3 Uplink issues related with noise on the DC carriers](#UplinkissuesrelatedwithnoiseontheDCcarriers)
+* 1. [ OAI CN5G pre-requisites](#OAICN5Gpre-requisites)
+* 2. [2.2 OAI CN5G configuration files](#OAICN5Gconfigurationfiles)
+* 3. [2.3 Pull OAI CN5G docker images](#PullOAICN5Gdockerimages)
+* 4. [2.4 Start OAI CN5G](#StartOAICN5G)
+* 5. [2.5 Stop OAI CN5G](#StopOAICN5G)
+* 6. [2.6 OAI CN5G configuration](#OAICN5Gconfiguration)
+* 7. [2.7 Add an ISIM to the OAI CN5G database](#AddanISIMtotheOAICN5Gdatabase)
+* 8. [3.1 SIM programming and configuration](#SIMprogrammingandconfiguration)
+* 9. [3.2 SUPI concealment](#SUPIconcealment)
+* 10. [OAI gNB pre-requisites](#OAIgNBpre-requisites)
+	* 10.1. [Build UHD from source](#BuildUHDfromsource)
+	* 10.2. [USRP x310 Setup](#USRPx310Setup)
+		* 10.2.1. [Prerequisites](#Prerequisites)
+		* 10.2.2. [Check Python installation](#CheckPythoninstallation)
+		* 10.2.3. [Configure firewall to allow communication with USRP](#ConfigurefirewalltoallowcommunicationwithUSRP)
+	* 10.3. [Installing GNUradio from source (Optional/not required for OAI)](#InstallingGNUradiofromsourceOptionalnotrequiredforOAI)
+	* 10.4. [4.1.4. Enabling python support for GNUradio](#EnablingpythonsupportforGNUradio)
+	* 10.5. [4.1.5. <a name='USRP testing'>Starting and testing the USRP](#anameUSRPtestingStartingandtestingtheUSRP)
+* 11. [ Build OAI gNB](#BuildOAIgNB)
+* 12. [4.3. OAI gNB configuration](#OAIgNBconfiguration)
+* 13. [Run OAI CN5G](#RunOAICN5G)
+* 14. [4.2 Run OAI gNB](#RunOAIgNB)
+	* 14.1. [USRP X310](#USRPX310)
+	* 14.2. [RFSIMULATOR](#RFSIMULATOR)
+* 15. [Connect COTS UE](#ConnectCOTSUE)
+* 16. [Debugging UHD](#DebuggingUHD)
+* 17. [Network not visible on the UE](#NetworknotvisibleontheUE)
+* 18. [No internet on UE (masq does not work)](#NointernetonUEmasqdoesnotwork)
+* 19. [USRP N300 and X300 Ethernet Tuning](#USRPN300andX300EthernetTuning)
+* 20. [Authors](#Authors)
+* 21. [License](#License)
+* 22. [Acknowledgments](#Acknowledgments)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
 	autoSave=true
 	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc --># perfEval-5G
-
-
+<!-- /vscode-markdown-toc -->
 
 **Table of Contents**
 
@@ -59,7 +73,7 @@ Our testbed configuration:
 
 # 2. OAI CN5G
 
-## 2.1 <a name='OAICN5Gpre-requisites'></a> OAI CN5G pre-requisites
+##  1. <a name='OAICN5Gpre-requisites'></a> OAI CN5G pre-requisites
 
 Install and configure the OAI 5G core pre-requisites as follows
 
@@ -80,7 +94,7 @@ sudo usermod -a -G docker $(whoami)
 reboot
 ```
 
-## 2.2 OAI CN5G configuration files
+##  2. <a name='OAICN5Gconfigurationfiles'></a>2.2 OAI CN5G configuration files
 
 Download and copy configuration files:
 
@@ -91,7 +105,7 @@ mv ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g/doc/tutorial_res
 rm -r ~/openairinterface5g-develop-doc-tutorial_resources-oai-cn5g ~/oai-cn5g.zip
 ```
 
-## 2.3 Pull OAI CN5G docker images
+##  3. <a name='PullOAICN5Gdockerimages'></a>2.3 Pull OAI CN5G docker images
 
 ```bash
 docker pull mysql:8.0
@@ -106,18 +120,18 @@ docker pull oaisoftwarealliance/trf-gen-cn5g:latest
 docker build --target ims --tag asterisk-ims:latest --file ~/oai-cn5g/Dockerfile .
 ```
 
-## 2.4 Start OAI CN5G
+##  4. <a name='StartOAICN5G'></a>2.4 Start OAI CN5G
 ```bash
 cd ~/oai-cn5g
 docker compose up -d
 ```
 
-## 2.5 Stop OAI CN5G
+##  5. <a name='StopOAICN5G'></a>2.5 Stop OAI CN5G
 ```bash
 cd ~/oai-cn5g
 docker compose down
 ```
-## 2.6 OAI CN5G configuration
+##  6. <a name='OAICN5Gconfiguration'></a>2.6 OAI CN5G configuration
 
 ```bash
 # Access the core configuration files
@@ -132,7 +146,7 @@ To configure the core correctly the following steps need to be taken:
  * The APN/DNN needs to be configured so that it is the same as the one present in the UE and set it to IPv4, not IPv4/6 or IPv6.
  * The ISIM credentials need to be added to the list of subscribers through the oai_db2.sql database file.
 
-## 2.7 Add an ISIM to the OAI CN5G database
+##  7. <a name='AddanISIMtotheOAICN5Gdatabase'></a>2.7 Add an ISIM to the OAI CN5G database
 
 After configuring the ISIM, you need to register its ISIM credentials to the list of subscribers through the oai_db2.sql database:
 
@@ -154,7 +168,7 @@ INSERT INTO `AuthenticationSubscription` (`ueid`, `authenticationMethod`, `encPe
 We are using a sysmoISIM-SJA2 ISIM (5G-enabled) in this example tutorial.
 Sysmocom SIM user manual: https://sysmocom.de/manuals/sysmousim-manual.pdf
 
-## 3.1 SIM programming and configuration 
+##  8. <a name='SIMprogrammingandconfiguration'></a>3.1 SIM programming and configuration 
 
 Download `pySim <https://github.com/osmocom/pysim>`_ : 
 
@@ -195,7 +209,7 @@ You need to set the PLMN to 00101, optionally you can also reconfigure other asp
 
 You will need to get the ICCID, ADM-KEY and other security information from the SIM provider.
 
-## 3.2 SUPI concealment
+##  9. <a name='SUPIconcealment'></a>3.2 SUPI concealment
 
 You will need to modify the 5G-related fields of the sim card. In particular you need to configure or disable SUPI concealment (SUCI).
 
@@ -225,11 +239,11 @@ More information on pySim and SUCI configuration can be found in `this guide <ht
 
 # 4. OAI 5G SA gNB
 
-##  4.1. <a name='OAIgNBpre-requisites'></a>OAI gNB pre-requisites
+##  10. <a name='OAIgNBpre-requisites'></a>OAI gNB pre-requisites
 
 Install and configure the OAI gNB pre-requisites as follows
 
-###  4.1.1. <a name='BuildUHDfromsource'></a>Build UHD from source
+###  10.1. <a name='BuildUHDfromsource'></a>Build UHD from source
 ```bash
 sudo apt install -y libboost-all-dev libusb-1.0-0-dev doxygen python3-docutils python3-mako python3-numpy python3-requests python3-ruamel.yaml python3-setuptools cmake build-essential
 
@@ -246,17 +260,17 @@ sudo make install
 sudo ldconfig
 sudo uhd_images_downloader
 ```
-###  4.1.2. <a name='USRP x310 Setup'></a>USRP x310 Setup
+###  10.2. <a name='USRPx310Setup'></a>USRP x310 Setup
 
 Install the x310 daughterboard according to the [Ettus Wiki](https://kb.ettus.com/USRP_X_Series_Quick_Start_(Daughterboard_Installation)).
 
-#### Prerequisites
+####  10.2.1. <a name='Prerequisites'></a>Prerequisites
 Make sure you have the latest distribution packages.
 
 ```bash
 sudo apt-get update && apt-get upgrade
 ```
-#### Check Python installation  
+####  10.2.2. <a name='CheckPythoninstallation'></a>Check Python installation  
 Ensure you have `python3 (3.6+)` installed. Install `pip3`.
 
 ```bash
@@ -268,7 +282,7 @@ Set the pythonpath in `~/.bashrc`.
 ```bash
 export PYTHONPATH=/usr/local/lib/python3/dist-packages/:$PYTHONPATH
 ```
-#### Configure firewall to allow communication with USRP
+####  10.2.3. <a name='ConfigurefirewalltoallowcommunicationwithUSRP'></a>Configure firewall to allow communication with USRP
 
 Add an iptables rule to allow data from udp port 49152.
 
@@ -288,7 +302,7 @@ iptables-save > /etc/iptables/rules.v4
 exit
 ```
 
-### 4.1.3. <a name='GNUradio Installation (Optional)'></a>Installing GNUradio from source (Optional/not required for OAI)
+###  10.3. <a name='InstallingGNUradiofromsourceOptionalnotrequiredforOAI'></a>Installing GNUradio from source (Optional/not required for OAI)
 
 Follow the instructions from [the wiki](https://wiki.gnuradio.org/index.php/InstallingGR#From_Source). Additional notes are given below.
 
@@ -314,7 +328,7 @@ Check gcc configuration to make sure gcc-8 is default.
 sudo update-alternatives --config gcc
 ```
 
-### 4.1.4. Enabling python support for GNUradio 
+###  10.4. <a name='EnablingpythonsupportforGNUradio'></a>4.1.4. Enabling python support for GNUradio 
 
 Install `pygccxml` for python3
 
@@ -364,7 +378,7 @@ Check gnuradio install as follows:
 ```bash
 gnuradio-config-info --version
 ```
-### 4.1.5. <a name='USRP testing'>Starting and testing the USRP 
+###  10.5. <a name='anameUSRPtestingStartingandtestingtheUSRP'></a>4.1.5. <a name='USRP testing'>Starting and testing the USRP 
 
 Follow the guide below, if the usrp and daughterboards are assembled already, start at step 12
 
@@ -372,7 +386,7 @@ Follow the guide below, if the usrp and daughterboards are assembled already, st
 https://kb.ettus.com/USRP_X_Series_Quick_Start_(Daughterboard_Installation)
 ```
 
-##  4.2. <a name='BuildOAIgNB'></a> Build OAI gNB
+##  11. <a name='BuildOAIgNB'></a> Build OAI gNB
 
 ```bash
 # Get openairinterface5g source code
@@ -391,7 +405,7 @@ cd cmake_targets
 ./build_oai -w USRP --ninja --gNB -c
 
 ```
-## 4.3. OAI gNB configuration
+##  12. <a name='OAIgNBconfiguration'></a>4.3. OAI gNB configuration
 
 You will need to adjust the gNB configuration file depending on the desired setup prior to running the gNB in the CONF folder. It contains multiple files for different USRP devices, bandwidth and frequency bands that can be adjusted to your specific setup. We include some of our custom configuration files in the conf-files folder for reference.
 
@@ -418,30 +432,30 @@ To configure the phone UE to connect to the 5G network the following steps must 
 
 # 6. Run OAI CN5G , OAI gNB and connect COTS UE
 
-##  6.1. <a name='RunOAICN5G'></a>Run OAI CN5G
+##  13. <a name='RunOAICN5G'></a>Run OAI CN5G
 
 ```bash
 cd ~/oai-cn5g
 docker compose up -d
 ```
 
-##  6.2. <a name='RunOAIgNB'></a>4.2 Run OAI gNB
+##  14. <a name='RunOAIgNB'></a>4.2 Run OAI gNB
 
-###  6.2.1. <a name='USRPX310'></a>USRP X310
+###  14.1. <a name='USRPX310'></a>USRP X310
 ```bash
 cd ~/openairinterface5g
 source oaienv
 cd cmake_targets/ran_build/build
 sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/5gnb.band78.fr1.106PRB.sa.usrpx310.conf --sa --tune-offset 20000000
 ```
-###  6.2.2. <a name='RFSIMULATOR'></a>RFSIMULATOR
+###  14.2. <a name='RFSIMULATOR'></a>RFSIMULATOR
 ```bash
 cd ~/openairinterface5g
 source oaienv
 cd cmake_targets/ran_build/build
 sudo RFSIMULATOR=server ./nr-softmodem --rfsim --sa -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf
 ```
-##  6.3. <a name='Connect COTS UE'></a>Connect COTS UE
+##  15. <a name='ConnectCOTSUE'></a>Connect COTS UE
 
 * Make sure that the gNB is running and is properly connected to the core.
 * Disable automatic network selection if it is enabled.
@@ -451,20 +465,20 @@ sudo RFSIMULATOR=server ./nr-softmodem --rfsim --sa -O ../../../targets/PROJECTS
 
 # 7. Troubleshooting, debugging and advanced configurations
 
-##  7.1. <a name='Debugging UHD'></a>Debugging UHD
+##  16. <a name='DebuggingUHD'></a>Debugging UHD
 
 * If you get `" No devices found for ----->"` error when trying to run `uhd_find_devices`, ensure that you have the [iptables rule](#configure-firewall-to-allow-communication-with-usrp) in place.
 
 * If you are following the [Ettus daughterboard installation wiki](https://kb.ettus.com/USRP_X_Series_Quick_Start_(Daughterboard_Installation)), note that the `uhd_fft` utility is **not** installed by `UHD`, but rather by `GNUradio`.
 
-##  7.2. <a name='Network not visible on the UE'></a>Network not visible on the UE
+##  17. <a name='NetworknotvisibleontheUE'></a>Network not visible on the UE
 * Verify the APN and make sure that it is the same as the value present in the AMF configuration.
 * Verify the ISIM information in the OAI subscriber database (oai_db2.sql) and make sure that all the parameters are inputed correctly in the right format.
 * Verify the frequency band in the gNB configuration and make sure that the UE supports it.
 * In the gNB configuration file, experiment with different rx_gain values.
 
 
-##  7.3. <a name='No internet on the UE (masq does not work)'></a>No internet on UE (masq does not work)
+##  18. <a name='NointernetonUEmasqdoesnotwork'></a>No internet on UE (masq does not work)
 
 Docker changed the default policy of the `FORWARD` chain to drop, as well as added a bunch of rules in the `POSTROUTING` chain in the `nat` table.
 
@@ -477,7 +491,7 @@ sudo iptables -t nat -I POSTROUTING 1 -s 172.16.0.0/24 -o enx2c16dbab4418 -j MAS
 
 In the rules above, I’ve specified the source IP (IP assigned to UE by the OAI 5G core) to make the rules more specific. This makes sure that these rules don’t conflict with the docker rules.
 
-##  7.4. <a name='USRPN300andX300EthernetTuning'></a>USRP N300 and X300 Ethernet Tuning
+##  19. <a name='USRPN300andX300EthernetTuning'></a>USRP N300 and X300 Ethernet Tuning
 
 Please also refer to the official [USRP Host Performance Tuning Tips and Tricks](https://kb.ettus.com/USRP_Host_Performance_Tuning_Tips_and_Tricks) tuning guide.
 
@@ -501,17 +515,15 @@ sudo ethtool -G enp1s0f0 tx 4096 rx 4096
 * If you get real-time problems on heavy UL traffic, reduce the maximum UL MCS using an additional command-line switch: `--MACRLCs.[0].ul_max_mcs 14`.
 * There is noise on the DC carriers on N300 and especially the X300 in UL. To avoid their use or shift them away from the center to use more UL spectrum, we used the `--tune-offset <Hz>` command line switch, where `<Hz>` is ideally half the bandwidth, or possibly less. For Example `--tune-offset 20000000` for 40Mhz bandwidth.
 
-## Authors
+##  20. <a name='Authors'></a>Authors
 
 * **Mohamed Rouili** - [mrouili](https://github.com/mrouili)
 * **Niloy Saha** - [niloysh](https://github.com/niloysh)
 
-## License
+##  21. <a name='License'></a>License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
+##  22. <a name='Acknowledgments'></a>Acknowledgments
 
-* This repository
-* Inspiration
-* etc
+* The tutorials and deployment instructions described in this guide are based on the guides and documentation provided by the [OpenAirInterface](https://gitlab.eurecom.fr/oai/openairinterface5g/-/tree/develop/doc) and [srsRAN](https://github.com/srsran/srsRAN_Project_docs/tree/main/docs/source/tutorials/source) projects. All credits go to their respective authors.
