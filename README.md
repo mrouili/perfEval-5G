@@ -61,6 +61,8 @@ Our testbed configuration:
 
 ## 2.1 <a name='OAICN5Gpre-requisites'></a> OAI CN5G pre-requisites
 
+Install and configure the OAI 5G core pre-requisites as follows
+
 ```bash
 sudo apt install -y git net-tools putty
 
@@ -79,7 +81,9 @@ reboot
 ```
 
 ## 2.2 OAI CN5G configuration files
+
 Download and copy configuration files:
+
 ```bash
 wget -O ~/oai-cn5g.zip https://gitlab.eurecom.fr/oai/openairinterface5g/-/archive/develop/openairinterface5g-develop.zip?path=doc/tutorial_resources/oai-cn5g
 unzip ~/oai-cn5g.zip
@@ -223,6 +227,8 @@ More information on pySim and SUCI configuration can be found in `this guide <ht
 
 ##  4.1. <a name='OAIgNBpre-requisites'></a>OAI gNB pre-requisites
 
+Install and configure the OAI gNB pre-requisites as follows
+
 ###  4.1.1. <a name='BuildUHDfromsource'></a>Build UHD from source
 ```bash
 sudo apt install -y libboost-all-dev libusb-1.0-0-dev doxygen python3-docutils python3-mako python3-numpy python3-requests python3-ruamel.yaml python3-setuptools cmake build-essential
@@ -246,28 +252,33 @@ Install the x310 daughterboard according to the [Ettus Wiki](https://kb.ettus.co
 
 #### Prerequisites
 Make sure you have the latest distribution packages.
-```
+
+```bash
 sudo apt-get update && apt-get upgrade
 ```
 #### Check Python installation  
 Ensure you have `python3 (3.6+)` installed. Install `pip3`.
 
-```
+```bash
 sudo apt-get install python3-pip
 ```
 
 Set the pythonpath in `~/.bashrc`.
-```
+
+```bash
 export PYTHONPATH=/usr/local/lib/python3/dist-packages/:$PYTHONPATH
 ```
 #### Configure firewall to allow communication with USRP
 
 Add an iptables rule to allow data from udp port 49152.
-```
+
+```bash
 sudo iptables -A INPUT -p udp --sport 49152 -j ACCEPT
 ```
+
 Make the iptables rule persistent across reboots
-```
+
+```bash
 sudo apt install iptables-persistent
 
 sudo su
@@ -281,15 +292,15 @@ exit
 
 Follow the instructions from [the wiki](https://wiki.gnuradio.org/index.php/InstallingGR#From_Source). Additional notes are given below.
 
-**Note**: we used the maint-3.9 branch.
-The maint-3.10 branch throws errors related to numpy.    
-**Note**: Don't forget to install volk separately.  
-**Note**: Don't forget to install dependencies from [here](https://wiki.gnuradio.org/index.php?title=UbuntuInstall#Focal_Fossa_.2820.04.29_through_Impish_Indri_.2821.10.29) before starting. we installed all the dependencies Bionic Beaver through Focal Fossa.
+* We used the maint-3.9 branch.
+* The maint-3.10 branch throws errors related to numpy.    
+* Don't forget to install volk separately.  
+* Don't forget to install dependencies from [here](https://wiki.gnuradio.org/index.php?title=UbuntuInstall#Focal_Fossa_.2820.04.29_through_Impish_Indri_.2821.10.29) before starting. we installed all the dependencies Bionic Beaver through Focal Fossa.
 
 
-Make complains about gcc-7 being too old. Thus, install `gcc-8` as follows.
+Make gives us error about gcc-7 being too old. Thus, install `gcc-8` as follows.
 
-```
+```bash
 sudo apt-get install gcc-8
 
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 700 --slave /usr/bin/g++ g++ /usr/bin/g++-7
@@ -298,14 +309,16 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 800 --slave /
 ```
 
 Check gcc configuration to make sure gcc-8 is default.
-```
+
+```bash
 sudo update-alternatives --config gcc
 ```
 
 ### 4.1.4. Enabling python support for GNUradio 
 
 Install `pygccxml` for python3
-```
+
+```bash
 sudo apt-get install -y python3-pygccxml
 ```
 
@@ -313,12 +326,13 @@ sudo apt-get install -y python3-pygccxml
 Install pybind11 from source. Clone the pybind11 library from [Github](https://github.com/pybind/pybind11).
 During the install, you will run into error regarding pytest.
 To solve, run the following.
-```
+
+```bash
 /usr/bin/python3.6 -m pip install pytest ====> if this doesnt work try: sudo apt-get install gnuradio python3-packaging and skip the next step.
 ```
 Then do the standard make process as follows:
 
-```
+```bash
 mkdir build
 cd build
 cmake ../
@@ -328,28 +342,33 @@ sudo ldconfig
 ```
 
 I did have to reboot to get pybind11 working. 
-```
+
+```bash
 sudo reboot
 ```
 
 Install pyqtgraph. Not sure if this is necessary.
-```
+
+```bash
 sudo pip3 install pyqtgraph
 ```
 
 When done with the install, don't forget to update shared libraries.
-```
+
+```bash
 sudo ldconfig
 ```
 
 Check gnuradio install as follows:
-```
+
+```bash
 gnuradio-config-info --version
 ```
 ### 4.1.5. <a name='USRP testing'>Starting and testing the USRP 
 
 Follow the guide below, if the usrp and daughterboards are assembled already, start at step 12
-```
+
+```bash
 https://kb.ettus.com/USRP_X_Series_Quick_Start_(Daughterboard_Installation)
 ```
 
@@ -481,3 +500,18 @@ sudo ethtool -G enp1s0f0 tx 4096 rx 4096
 * Enable Performance Mode `sudo cpupower idle-set -D 0`
 * If you get real-time problems on heavy UL traffic, reduce the maximum UL MCS using an additional command-line switch: `--MACRLCs.[0].ul_max_mcs 14`.
 * There is noise on the DC carriers on N300 and especially the X300 in UL. To avoid their use or shift them away from the center to use more UL spectrum, we used the `--tune-offset <Hz>` command line switch, where `<Hz>` is ideally half the bandwidth, or possibly less. For Example `--tune-offset 20000000` for 40Mhz bandwidth.
+
+## Authors
+
+* **Mohamed Rouili** - [mrouili](https://github.com/mrouili)
+* **Niloy Saha** - [niloysh](https://github.com/niloysh)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* This repository
+* Inspiration
+* etc
