@@ -45,6 +45,7 @@ Minimum hardware requirements defined by OAI:
     - Module, M.2 to USB adapter, antennas and SIM card
     - Firmware version of Quectel MUST be equal or higher than **RM500QGLABR11A06M4G**
 
+
 Our testbed configuration:
 - 3 Desktops for OAI CN5G, OAI gNB and simulated UEs
     - Operating System: [Ubuntu 22.04 LTS](https://releases.ubuntu.com/22.04/ubuntu-22.04.1-desktop-amd64.iso)
@@ -53,8 +54,8 @@ Our testbed configuration:
 - [USRP X300](https://www.ettus.com/all-products/x300-kit/)
     - Please identify the network interface(s) on which the USRP is connected and update the gNB configuration file   
 - Google Pixel 7 PRO UE
-    - 
-    - 
+    - Android 13 Tiramisu
+    - 5G Sub-6: Bands n1/2/3/5/7/8/12/20/25/28/30/38/40/41/48/66/71/77/78
 
 # 2. OAI CN5G
 
@@ -243,12 +244,12 @@ sudo uhd_images_downloader
 
 Install the x310 daughterboard according to the [Ettus Wiki](https://kb.ettus.com/USRP_X_Series_Quick_Start_(Daughterboard_Installation)).
 
-# Prerequisites
+#### Prerequisites
 Make sure you have the latest distribution packages.
 ```
 sudo apt-get update && apt-get upgrade
 ```
-## Check Python installation  
+#### Check Python installation  
 Ensure you have `python3 (3.6+)` installed. Install `pip3`.
 
 ```
@@ -259,7 +260,7 @@ Set the pythonpath in `~/.bashrc`.
 ```
 export PYTHONPATH=/usr/local/lib/python3/dist-packages/:$PYTHONPATH
 ```
-## Configure firewall to allow communication with USRP
+#### Configure firewall to allow communication with USRP
 
 Add an iptables rule to allow data from udp port 49152.
 ```
@@ -301,7 +302,7 @@ Check gcc configuration to make sure gcc-8 is default.
 sudo update-alternatives --config gcc
 ```
 
-#### 4.1.4. Enabling python support for GNUradio 
+### 4.1.4. Enabling python support for GNUradio 
 
 Install `pygccxml` for python3
 ```
