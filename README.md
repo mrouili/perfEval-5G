@@ -1,3 +1,4 @@
+# Table of Contents
 <!-- vscode-markdown-toc -->
 * [1.1 OAI minimum requirements](#OAIminimumrequirements)
 * [1.2. Our UWaterloo testbed configuration](#OurUWaterlootestbedconfiguration)
@@ -40,9 +41,6 @@
 <!-- /vscode-markdown-toc --># perfEval-5G
 
 
-
-**Table of Contents**
-
 # <a name='Deployment Scenario'></a>1. Deployment Scenario
 In this tutorial we describe how to configure and run a 5G end-to-end setup with OAI CN5G, OAI gNB and COTS UE.
 
@@ -74,7 +72,7 @@ In this tutorial we describe how to configure and run a 5G end-to-end setup with
     - Android 13 Tiramisu
     - 5G Sub-6: Bands n1/2/3/5/7/8/12/20/25/28/30/38/40/41/48/66/71/77/78
 
-# 2. <a name='OAI CN5G'></a>2.OAI CN5G
+# <a name='OAI CN5G'></a>2.OAI CN5G
 
 ## <a name='OAICN5Gpre-requisites'></a>2.1 OAI CN5G pre-requisites
 
@@ -167,7 +165,7 @@ INSERT INTO `AuthenticationSubscription` (`ueid`, `authenticationMethod`, `encPe
 ('001010000060591', '5G_AKA', '18E8DE5BA04A8D910B010D298672BCE0', '18E8DE5BA04A8D910B010D298672BCE0', '{\"sqn\": \"000000000020\", \"sqnScheme\": \"NON_TIME_BASED\", \"lastIndexes\": {\"ausf\": 0}}', '8000', 'milenage', 'B71C0607B0A5AE6E3657FEE846579991', NULL, NULL, NULL, NULL, '001010000060591');
 ```
 
-#  3. <a name='ISIM'></a> ISIM configuration
+# <a name='ISIM'></a>3. ISIM configuration
 We are using a sysmoISIM-SJA2 ISIM (5G-enabled) in this example tutorial.
 Sysmocom SIM user manual: https://sysmocom.de/manuals/sysmousim-manual.pdf
 
@@ -240,7 +238,7 @@ After these steps **UST service 124** and **125** should be disabled. You can ve
 
 More information on pySim and SUCI configuration can be found in `this guide <https://gist.github.com/mrlnc/01d6300f1904f154d969ff205136b753>`_, written by Merlin Chlosta. 
 
-# 4. <a name='OAIgNBpre-requisites'></a>4. OAI 5G SA gNB
+# <a name='OAIgNBpre-requisites'></a>4. OAI 5G SA gNB
 
 
 Install and configure the OAI gNB pre-requisites as follows
@@ -387,7 +385,7 @@ Follow the guide below, if the usrp and daughterboards are assembled already, st
 ```bash
 https://kb.ettus.com/USRP_X_Series_Quick_Start_(Daughterboard_Installation)
 ```
-# 5. <a name='OAI 5G SA gNB'></a>5. OAI 5G SA gNB
+# <a name='OAI 5G SA gNB'></a>5. OAI 5G SA gNB
 
 Install and deploy the OAI 5G SA gNB as follows
 
@@ -424,7 +422,7 @@ sudo nano <conf_file>
 * To configure the connection between the core and the gNB, you need to set the correct AMF parameters (amf_ip_address) to the address of the AMF and the correct network interfaces (NETWORK_INTERFACES).
 * The selected frequency band and configuration should be supported by the UE, we used TDD band 78 with our Google Pixel 7 PRO UE.
 
-# 6. <a name='SetupandconfigureCOTSUE'></a>6. Setup and configure COTS UE
+# <a name='SetupandconfigureCOTSUE'></a>6. Setup and configure COTS UE
 
 You should make sure your UE device is capable of operating in 5G SA mode and that it operates in the bands supported by the OAI Project gNB. As mentioned previously, we have used a Google Pixel 7 PRO in this turotial.
 
@@ -435,7 +433,7 @@ To configure the phone UE to connect to the 5G network the following steps must 
 * The APN needs to be set to the same as the DNN/APN option as set in the OAI CN5G core subscriber registration.
 * In some phones there may also be an option to configure VoNR and/or VoLTE, it is important to make sure that this is disabled.
 
-# 7. <a name='SetupandconfigureCOTSUECN5GgNBconnectCOTSUE'></a>7. Setup and configure COTS UERun OAI CN5G , OAI gNB and connect COTS UE
+# <a name='SetupandconfigureCOTSUECN5GgNBconnectCOTSUE'></a>7. Setup and configure COTS UERun OAI CN5G , OAI gNB and connect COTS UE
 
 ## <a name='RunOAICN5G'></a>7.1 Run OAI CN5G
 
@@ -468,7 +466,7 @@ sudo RFSIMULATOR=server ./nr-softmodem --rfsim --sa -O ../../../targets/PROJECTS
 * Monitor the AMF and gNB logs and make sure that the UE has successfully attached to the network.
 * Test connectivity and bandwidth by running streaming data or running a speedtest.
 
-# 8. <a name='Troubleshootingdebuggingadvancedconfiguration'></a>8. Troubleshooting, debugging and advanced configurations
+# <a name='Troubleshootingdebuggingadvancedconfiguration'></a>8. Troubleshooting, debugging and advanced configurations
 
 ## <a name='DebuggingUHD'></a>8.1 Debugging UHD
 
