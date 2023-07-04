@@ -470,7 +470,7 @@ sudo RFSIMULATOR=server ./nr-softmodem --rfsim --sa -O ../../../targets/PROJECTS
 
 ## <a name='DebuggingUHD'></a>8.1 Debugging UHD
 
-* If you get `" No devices found for ----->"` error when trying to run `uhd_find_devices`, ensure that you have the [iptables rule](#configure-firewall-to-allow-communication-with-usrp) in place.
+* If you get `" No devices found for ----->"` error when trying to run `uhd_find_devices`, ensure that you have the [iptables rule](#NointernetonUEmasqdoesnotwork) in place.
 
 * If you are following the [Ettus daughterboard installation wiki](https://kb.ettus.com/USRP_X_Series_Quick_Start_(Daughterboard_Installation)), note that the `uhd_fft` utility is **not** installed by `UHD`, but rather by `GNUradio`.
 
@@ -530,5 +530,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## <a name='Acknowledgments'></a>Acknowledgments
 
 * The tutorials and deployment instructions described in this guide are based on the guides and documentation provided by the [OpenAirInterface](https://gitlab.eurecom.fr/oai/openairinterface5g/-/tree/develop/doc) and [srsRAN](https://github.com/srsran/srsRAN_Project_docs/tree/main/docs/source/tutorials/source) projects. All credits go to their respective authors.
-* Inspiration
-* etc
