@@ -66,7 +66,7 @@ In this tutorial we describe how to configure and run a 5G end-to-end setup with
     - Operating System: [Ubuntu 22.04 LTS](https://releases.ubuntu.com/22.04/ubuntu-22.04.1-desktop-amd64.iso)
     - CPU: i9-10980XE CPU @ 3.5 GHz
     - RAM: 32 GB
-- [USRP X310](https://www.ettus.com/all-products/x300-kit/)
+- [USRP X310](https://www.ettus.com/all-products/x310-kit/)
     - Please identify the network interface(s) on which the USRP is connected and update the gNB configuration file   
 - Google Pixel 7 PRO UE
     - Android 13 Tiramisu
