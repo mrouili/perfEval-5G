@@ -1,3 +1,5 @@
+This guide provides step-by-step instructions on how to deploy an end-to-end 5G SA network using open-source software solutions and COTS hardware.
+
 # Table of Contents
 <!-- vscode-markdown-toc -->
 * [1.1 OAI minimum requirements](#OAIminimumrequirements)
@@ -40,6 +42,7 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc --># perfEval-5G
 
+This guide provides step-by-step instructions on how to deploy an end-to-end 5G SA network using open-source software solutions and COTS hardware
 
 # <a name='Deployment Scenario'></a>1. Deployment Scenario
 In this tutorial we describe how to configure and run a 5G end-to-end setup with OAI CN5G, OAI gNB and COTS UE.
@@ -356,24 +359,18 @@ sudo make install
 sudo ldconfig
 ```
 
-I did have to reboot to get pybind11 working. 
+Reboot to get pybind11 working. 
 
 ```bash
 sudo reboot
 ```
 
-Install pyqtgraph. Not sure if this is necessary.
+Install pyqtgraph then update shared libraries.
 
 ```bash
 sudo pip3 install pyqtgraph
-```
-
-When done with the install, don't forget to update shared libraries.
-
-```bash
 sudo ldconfig
 ```
-
 Check gnuradio install as follows:
 
 ```bash
