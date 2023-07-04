@@ -433,7 +433,7 @@ To configure the phone UE to connect to the 5G network the following steps must 
 * The APN needs to be set to the same as the DNN/APN option as set in the OAI CN5G core subscriber registration.
 * In some phones there may also be an option to configure VoNR and/or VoLTE, it is important to make sure that this is disabled.
 
-# <a name='SetupandconfigureCOTSUECN5GgNBconnectCOTSUE'></a>7. Setup and configure COTS UERun OAI CN5G , OAI gNB and connect COTS UE
+# <a name='SetupandconfigureCOTSUECN5GgNBconnectCOTSUE'></a>7. Setup and configure COTS UE, Run OAI CN5G , OAI gNB and connect COTS UE
 
 ## <a name='RunOAICN5G'></a>7.1 Run OAI CN5G
 
