@@ -64,13 +64,14 @@ In this tutorial we describe how to configure and run a 5G end-to-end setup with
 ## <a name='OurUWaterlootestbedconfiguration'></a>1.2. Our UWaterloo testbed configuration
 - 3 Desktops for OAI CN5G, OAI gNB and simulated UEs
     - Operating System: [Ubuntu 22.04 LTS](https://releases.ubuntu.com/22.04/ubuntu-22.04.1-desktop-amd64.iso)
-    - CPU: 8 cores x86_64 @ 3.5 GHz
+    - CPU: i9-10980XE CPU @ 3.5 GHz
     - RAM: 32 GB
-- [USRP X300](https://www.ettus.com/all-products/x300-kit/)
+- [USRP X310](https://www.ettus.com/all-products/x300-kit/)
     - Please identify the network interface(s) on which the USRP is connected and update the gNB configuration file   
 - Google Pixel 7 PRO UE
     - Android 13 Tiramisu
     - 5G Sub-6: Bands n1/2/3/5/7/8/12/20/25/28/30/38/40/41/48/66/71/77/78
+    - Sysmocomm sysmoISIM-SJA2 programmable SIM
 
 # <a name='OAI CN5G'></a>2.OAI CN5G
 
