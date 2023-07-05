@@ -43,10 +43,11 @@ This guide provides step-by-step instructions on how to deploy an end-to-end 5G 
   - [8.1 Debugging UHD](#81-debugging-uhd)
   - [8.2 Network not visible on the UE](#82-network-not-visible-on-the-ue)
   - [8.3 No internet on UE (masq does not work)](#83-no-internet-on-ue-masq-does-not-work)
-  - [8.4 USRP N300 and X300 Ethernet Tuning](#84-usrp-n300-and-x300-ethernet-tuning)
-  - [Authors](#authors)
-  - [License](#license)
-  - [Acknowledgments](#acknowledgments)
+  - [8.4 UE Cannot Reconnect to Network](#84-ue-cannot-reconnect-to-network)
+  - [8.5 USRP N300 and X300 Ethernet Tuning](#85-usrp-n300-and-x300-ethernet-tuning)
+- [Authors](#authors)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
 
 This guide provides step-by-step instructions on how to deploy an end-to-end 5G SA network using open-source software solutions and COTS hardware
@@ -227,9 +228,7 @@ You will need to modify the 5G-related fields of the sim card. In particular you
 
 SUPI concealment can be disabled using the following commands. You should replace ``<ADM-KEY>`` with the ADM key of the respective SIM card. 
 
-.. note::
-   ``verify_adm`` does not print any output on success. If you see something like `"SW Mismatch: Expected 9000 and got 6982"` the ADM key is not correct. Keep in mind that after 
-   3 failed write attempts due to a wrong ADM key the SIM is blocked and cannot be rewritten again.
+* ``verify_adm`` does not print any output on success. If you see something like `"SW Mismatch: Expected 9000 and got 6982"` the ADM key is not correct. Keep in mind that after 3 failed write attempts due to a wrong ADM key the SIM is blocked and cannot be rewritten again.
 
 ```bash
 
@@ -250,7 +249,6 @@ After these steps **UST service 124** and **125** should be disabled. You can ve
 More information on pySim and SUCI configuration can be found in `this guide <https://gist.github.com/mrlnc/01d6300f1904f154d969ff205136b753>`_, written by Merlin Chlosta. 
 
 # <a name='OAIgNBpre-requisites'></a>4. OAI 5G SA gNB
-
 
 Install and configure the OAI gNB pre-requisites as follows
 
@@ -321,7 +319,6 @@ Follow the instructions from [the wiki](https://wiki.gnuradio.org/index.php/Inst
 * The maint-3.10 branch throws errors related to numpy.    
 * Don't forget to install volk separately.  
 * Don't forget to install dependencies from [here](https://wiki.gnuradio.org/index.php?title=UbuntuInstall#Focal_Fossa_.2820.04.29_through_Impish_Indri_.2821.10.29) before starting. we installed all the dependencies Bionic Beaver through Focal Fossa.
-
 
 Make gives us error about gcc-7 being too old. Thus, install `gcc-8` as follows.
 
@@ -512,13 +509,14 @@ sudo RFSIMULATOR=127.0.0.1 ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3
 * If you are following the [Ettus daughterboard installation wiki](https://kb.ettus.com/USRP_X_Series_Quick_Start_(Daughterboard_Installation)), note that the `uhd_fft` utility is **not** installed by `UHD`, but rather by `GNUradio`.
 
 ## <a name='NetworknotvisibleontheUE'></a>8.2 Network not visible on the UE
+
 * Verify the APN and make sure that it is the same as the value present in the AMF configuration.
 * Verify the ISIM information in the OAI subscriber database (oai_db2.sql) and make sure that all the parameters are inputed correctly in the right format.
 * Verify the frequency band in the gNB configuration and make sure that the UE supports it.
 * In the gNB configuration file, experiment with different rx_gain values.
 
 
-## <a name='NointernetonUEmasqdoesnotwork'></a>8.3 No internet on UE (masq does not work)
+## <a name='NointernetonUEmasqdoesnotwork'></a>8.3 No Internet on UE (masq does not work)
 
 Docker changed the default policy of the `FORWARD` chain to drop, as well as added a bunch of rules in the `POSTROUTING` chain in the `nat` table.
 
@@ -529,9 +527,17 @@ sudo iptables -I FORWARD 1 -s 172.16.0.0/24 -j ACCEPT
 sudo iptables -t nat -I POSTROUTING 1 -s 172.16.0.0/24 -o enx2c16dbab4418 -j MASQUERADE
 ```
 
-In the rules above, I’ve specified the source IP (IP assigned to UE by the OAI 5G core) to make the rules more specific. This makes sure that these rules don’t conflict with the docker rules.
+In the rules above, we specified the source IP (IP assigned to UE by the OAI 5G core) to make the rules more specific. This makes sure that these rules don’t conflict with the docker rules.
 
-## <a name='USRPN300andX300EthernetTuning'></a>8.4 USRP N300 and X300 Ethernet Tuning
+## <a name='UECannotReconnecttoNetwork '></a>8.4 UE Cannot Reconnect to Network
+
+We noticed RRC connection inconsistencies that result in the COTS UE not being able to reconnect to the network after a release. If you face a similar issue , try the following:
+ 
+* Disable and enable the ISIM
+* Reboot the UE
+* If none of the above works , disable the ISIM, reboot the gNB, then enable the ISIM again.
+
+## <a name='USRPN300andX300EthernetTuning'></a>8.5 USRP N300 and X300 Ethernet Tuning
 
 Please also refer to the official [USRP Host Performance Tuning Tips and Tricks](https://kb.ettus.com/USRP_Host_Performance_Tuning_Tips_and_Tricks) tuning guide.
 
@@ -553,7 +559,7 @@ sudo ethtool -G enp1s0f0 tx 4096 rx 4096
 ```
 * Enable Performance Mode `sudo cpupower idle-set -D 0`
 * If you get real-time problems on heavy UL traffic, reduce the maximum UL MCS using an additional command-line switch: `--MACRLCs.[0].ul_max_mcs 14`.
-* There is noise on the DC carriers on N300 and especially the X300 in UL. To avoid their use or shift them away from the center to use more UL spectrum, we used the `--tune-offset <Hz>` command line switch, where `<Hz>` is ideally half the bandwidth, or possibly less. For Example `--tune-offset 20000000` for 40Mhz bandwidth.
+* There is noise on the DC carriers on N300 and especially the X300 in UL. To avoid their use or shift them away from the center to use more UL spectrum, we used the `--tune-offset <Hz>` command line switch, where `<Hz>` is ideally half the bandwidth, or possibly less. For Example, we used `--tune-offset 20000000` for a 40Mhz bandwidth and noticed a visible increase in performance.
 
 ## <a name='Authors'></a>Authors
 
