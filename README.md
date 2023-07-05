@@ -29,12 +29,16 @@ This guide provides step-by-step instructions on how to deploy an end-to-end 5G 
   - [5.1 Build OAI gNB](#51-build-oai-gnb)
   - [5.2 OAI gNB configuration](#52-oai-gnb-configuration)
 - [6. Setup and configure COTS UE](#6-setup-and-configure-cots-ue)
-- [7. Setup and configure COTS UE, Run OAI CN5G , OAI gNB and connect COTS UE](#7-setup-and-configure-cots-ue-run-oai-cn5g--oai-gnb-and-connect-cots-ue)
+  - [6.1 Setup COTS UE](#61-setup-cots-ue)
+  - [6.2 Setup OAI UE](#62-setup-oai-ue)
+- [7. Deploy the 5G SA end-to-end network](#7-deploy-the-5g-sa-end-to-end-network)
   - [7.1 Run OAI CN5G](#71-run-oai-cn5g)
   - [7.2 Run OAI gNB](#72-run-oai-gnb)
     - [7.2.1 USRP X310](#721-usrp-x310)
     - [7.2.2 RFSIMULATOR](#722-rfsimulator)
   - [7.3 Connect COTS UE](#73-connect-cots-ue)
+    - [7.3.1 Connect COTS UE](#731-connect-cots-ue)
+    - [7.3.2 Connect Simulated UE](#732-connect-sim-ue)
 - [8. Troubleshooting, debugging and advanced configurations](#8-troubleshooting-debugging-and-advanced-configurations)
   - [8.1 Debugging UHD](#81-debugging-uhd)
   - [8.2 Network not visible on the UE](#82-network-not-visible-on-the-ue)
@@ -423,7 +427,9 @@ sudo nano <conf_file>
 * To configure the connection between the core and the gNB, you need to set the correct AMF parameters (amf_ip_address) to the address of the AMF and the correct network interfaces (NETWORK_INTERFACES).
 * The selected frequency band and configuration should be supported by the UE, we used TDD band 78 with our Google Pixel 7 PRO UE.
 
-# <a name='SetupandconfigureCOTSUE'></a>6. Setup and configure COTS UE
+# <a name='SetupandconfigureUE'></a>6. Setup and configure UE
+
+## <a name='SetupCOTSUE'></a>6.1 Setup COTS UE
 
 You should make sure your UE device is capable of operating in 5G SA mode and that it operates in the bands supported by the OAI Project gNB. As mentioned previously, we have used a Google Pixel 7 PRO in this turotial.
 
@@ -434,7 +440,20 @@ To configure the phone UE to connect to the 5G network the following steps must 
 * The APN needs to be set to the same as the DNN/APN option as set in the OAI CN5G core subscriber registration.
 * In some phones there may also be an option to configure VoNR and/or VoLTE, it is important to make sure that this is disabled.
 
-# <a name='SetupandconfigureCOTSUECN5GgNBconnectCOTSUE'></a>7. Setup and configure COTS UE, Run OAI CN5G , OAI gNB and connect COTS UE
+## <a name='SetupOAIUE'></a>6.2 Setup OAI UE
+
+You will need to adjust the ue configuration file depending on the desired setup prior to running the ue in the CONF folder.
+
+```bash
+# Access the gNB configuration files
+cd ~/openairinterface5g
+cd targets/PROJECTS/GENERIC-NR-5GC/CONF/
+sudo nano ue.conf
+```
+* The APN needs to be set to the same as the DNN/APN option as set in the OAI CN5G core subscriber registration.
+* S-NSSAI (SST and SD) parameters should be the same as the values seen in the core configuration files.
+
+# <a name='Deploythe5GSAend-to-endnetwork'></a>7. Deploy the 5G SA end-to-end network
 
 ## <a name='RunOAICN5G'></a>7.1 Run OAI CN5G
 
@@ -452,20 +471,37 @@ source oaienv
 cd cmake_targets/ran_build/build
 sudo ./nr-softmodem -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/5gnb.band78.fr1.106PRB.sa.usrpx310.conf --sa --tune-offset 20000000
 ```
-### <a name='RFSIMULATOR'></a>7.2.2 RFSIMULATOR
+### <a name='RFSIMULATOR'></a>7.2.2 RFSIMULATOR Mode
 ```bash
 cd ~/openairinterface5g
 source oaienv
 cd cmake_targets/ran_build/build
 sudo RFSIMULATOR=server ./nr-softmodem --rfsim --sa -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/gnb.sa.band78.fr1.106PRB.usrpb210.conf
 ```
-## <a name='ConnectCOTSUE'></a>7.3 Connect COTS UE
+## <a name='ConnectUE'></a>7.3 Connect UE
 
-* Make sure that the gNB is running and is properly connected to the core.
+Prior to connecting the UE, make sure that the gNB is running and is properly connected to the core.
+
+### <a name='ConnectCOTSUE'></a>7.3.1 Connect COTS UE
+
+Go into the network and cellular data parameters in the device and perform the following:
+
 * Disable automatic network selection if it is enabled.
 * Manually select and connect to the network. It will be displayed as the core name or PLMN value.
 * Monitor the AMF and gNB logs and make sure that the UE has successfully attached to the network.
 * Test connectivity and bandwidth by running streaming data or running a speedtest.
+
+### <a name='ConnectSimulatedUE'></a>7.3.2 Connect Simulated UE
+
+If you are using RFsimulator, you can deploy and connect the OAI simulated UE as follows:
+
+```bash
+cd ~/openairinterface5g
+source oaienv
+cd cmake_targets/ran_build/build
+sudo RFSIMULATOR=127.0.0.1 ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000  --rfsim --sa -O ../../../targets/PROJECTS/GENERIC-NR-5GC/CONF/ue.conf
+```
+* The command-line switch paramters need to match the values and configuration of the gNB.
 
 # <a name='Troubleshootingdebuggingadvancedconfiguration'></a>8. Troubleshooting, debugging and advanced configurations
 
