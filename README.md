@@ -534,9 +534,9 @@ In the rules above, we specified the source IP (IP assigned to UE by the OAI 5G 
 
 The Pixel 7 PRO UE drops the connection if IMS is not configured within 180sec after attach. This feature can disabled entirely from the IMS settings menu as follows:
 
-* Open the google phone app and dial *#*#0702#*#*
-* From the menu, Set NR_TIMER_WAIT_IMS_REGISTRATION from default 180 to -1.
-* Set SUPPORT_IMS_NR_REGISTRATION_TIMER from default 1 to 0
+* Open the google phone app and dial `*#*#0702#*#*`
+* From the menu, Set `NR_TIMER_WAIT_IMS_REGISTRATION` from default `180` to `-1`
+* Set `SUPPORT_IMS_NR_REGISTRATION_TIMER` from default `1` to `0`
 
 These modifications are persistant across reboots as they are associated with the ISIM.
 
