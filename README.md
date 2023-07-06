@@ -43,8 +43,9 @@ This guide provides step-by-step instructions on how to deploy an end-to-end 5G 
   - [8.1 Debugging UHD](#81-debugging-uhd)
   - [8.2 Network not visible on the UE](#82-network-not-visible-on-the-ue)
   - [8.3 No internet on UE (masq does not work)](#83-no-internet-on-ue-masq-does-not-work)
-  - [8.4 UE Cannot Reconnect to Network](#84-ue-cannot-reconnect-to-network)
-  - [8.5 USRP N300 and X300 Ethernet Tuning](#85-usrp-n300-and-x300-ethernet-tuning)
+  - [8.4 COTS UE drops connection to gNB](#84-cots-ue-drops-connection-to-gnb)
+  - [8.5 UE Cannot Reconnect to Network](#85-ue-cannot-reconnect-to-network)
+  - [8.6 USRP N300 and X300 Ethernet Tuning](#86-usrp-n300-and-x300-ethernet-tuning)
 - [Authors](#authors)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
@@ -529,7 +530,17 @@ sudo iptables -t nat -I POSTROUTING 1 -s 172.16.0.0/24 -o enx2c16dbab4418 -j MAS
 
 In the rules above, we specified the source IP (IP assigned to UE by the OAI 5G core) to make the rules more specific. This makes sure that these rules don’t conflict with the docker rules.
 
-## <a name='UECannotReconnecttoNetwork '></a>8.4 UE Cannot Reconnect to Network
+## <a name='COTSUEdropsconnectiontogNB'></a>8.4 COTS UE drops connection to gNB 
+
+The Pixel 7 PRO UE drops the connection if IMS is not configured within 180sec after attach. This feature can disabled entirely from the IMS settings menu as follows:
+
+* Open the google phone app and dial *#*#0702#*#*
+* From the menu, Set NR_TIMER_WAIT_IMS_REGISTRATION from default 180 to -1.
+* Set SUPPORT_IMS_NR_REGISTRATION_TIMER from default 1 to 0
+
+These modifications are persistant across reboots as they are associated with the ISIM.
+
+## <a name='UECannotReconnecttoNetwork '></a>8.5 UE Cannot Reconnect to Network
 
 We noticed RRC connection inconsistencies that result in the COTS UE not being able to reconnect to the network after a release. If you face a similar issue , try the following:
  
@@ -537,7 +548,7 @@ We noticed RRC connection inconsistencies that result in the COTS UE not being a
 * Reboot the UE
 * If none of the above works , disable the ISIM, reboot the gNB, then enable the ISIM again.
 
-## <a name='USRPN300andX300EthernetTuning'></a>8.5 USRP N300 and X300 Ethernet Tuning
+## <a name='USRPN300andX300EthernetTuning'></a>8.6 USRP N300 and X300 Ethernet Tuning
 
 Please also refer to the official [USRP Host Performance Tuning Tips and Tricks](https://kb.ettus.com/USRP_Host_Performance_Tuning_Tips_and_Tricks) tuning guide.
 
