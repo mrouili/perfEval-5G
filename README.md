@@ -1,4 +1,4 @@
-This guide provides step-by-step instructions on how to deploy an end-to-end 5G SA network using open-source software solutions and COTS hardware.
+This document provides a complete step-by-step guide containing instructions on how to deploy and operate an end-to-end 5G SA network using open-source software solutions and COTS hardware.
 # Table of Contents 
 
 - [Table of Contents](#table-of-contents)
