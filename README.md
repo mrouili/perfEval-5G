@@ -511,6 +511,7 @@ sudo RFSIMULATOR=127.0.0.1 ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3
 
 ## <a name='NetworknotvisibleontheUE'></a>8.2 Network not visible on the UE
 
+* Some UE's need to be forced to only see 5G NR networks, the android application 5G Switch - Force 5G Only ( available on the play store) can be used for this purpose, after opening the app, navigate to the ` Set Preferred Network Type` drop down menu and select `NR Only`. Close the app then disable and enable the ISIM again and the changes should be applied. 
 * Verify the APN and make sure that it is the same as the value present in the AMF configuration.
 * Verify the ISIM information in the OAI subscriber database (oai_db2.sql) and make sure that all the parameters are inputed correctly in the right format.
 * Verify the frequency band in the gNB configuration and make sure that the UE supports it.
